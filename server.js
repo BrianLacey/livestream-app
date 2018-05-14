@@ -4,7 +4,7 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const { MongoClient, ObjectId } = require("mongodb"),
   assert = require("assert");
-const url = process.env.DB_URL;
+const router = require("./app/routes/users.routes");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -18,82 +18,13 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post("/", (req, res) => {
-  return MongoClient.connect(`${url}/streamlabs-example`, (err, db) => {
-    assert.equal(null, err);
-    db
-      .collection("example")
-      .insertOne(req.body)
-      .then(result => {
-        return res.status(200).send(result);
-      })
-      .catch(err => res.status(500).send(err));
-    db.close();
-  });
-});
-
-app.get("/", (req, res) => {
-  return MongoClient.connect(`${url}/streamlabs-example`, (err, db) => {
-    assert.equal(null, err);
-    db
-      .collection("example")
-      .find()
-      .toArray()
-      .then(result => {
-        return res.status(200).send(result);
-      })
-      .catch(err => res.status(500).send(err));
-    db.close();
-  });
-});
-
-app.get("/:id", (req, res) => {
-  return MongoClient.connect(`${url}/streamlabs-example`, (err, db) => {
-    assert.equal(null, err);
-    db
-      .collection("example")
-      .findOne({ _id: ObjectId(req.params.id) })
-      .then(result => {
-        return res.status(200).send(result);
-      })
-      .catch(err => res.status(500).send(err));
-    db.close();
-  });
-});
-
-app.put("/:id", (req, res) => {
-  return MongoClient.connect(`${url}/streamlabs-example`, (err, db) => {
-    assert.equal(null, err);
-    db
-      .collection("example")
-      .replaceOne({ _id: ObjectId(req.params.id) }, req.body)
-      .then(result => {
-        return res.status(200).send(result);
-      })
-      .catch(err => res.status(500).send(err));
-    db.close();
-  });
-});
-
-app.delete("/:id", (req, res) => {
-  return MongoClient.connect(`${url}/streamlabs-example`, (err, db) => {
-    assert.equal(null, err);
-    db
-      .collection("example")
-      .deleteOne({ _id: ObjectId(req.params.id) })
-      .then(result => {
-        return res.status(200).send(result);
-      })
-      .catch(err => res.status(500).send(err));
-    db.close();
-  });
-});
+app.use("/api", router);
 
 app.use((err, req, res, next) => {
   res.status(500).send(err);
 });
 
-MongoClient.connect(url, (err, db) => {
+MongoClient.connect(process.env.DB_URL, (err, db) => {
   assert.equal(null, err);
   console.log("Connected to the database!");
   db.close();
