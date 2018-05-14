@@ -1,0 +1,16 @@
+{
+  "name": "streamlabs-test",
+  "version": "1.0.0",
+  "description": "A company assignment to demonstrate my coding skills",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brian Lacey",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "mongodb": "^2.2.31"
+  }
+}
