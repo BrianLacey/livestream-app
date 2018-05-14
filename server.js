@@ -4,7 +4,7 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const { MongoClient, ObjectId } = require("mongodb"),
   assert = require("assert");
-const router = require("./app/routes/example.routes");
+const router = require("./app/routes/users.routes");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -18,7 +18,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/", router);
+app.use("/api", router);
 
 app.use((err, req, res, next) => {
   res.status(500).send(err);
